@@ -1,4 +1,3 @@
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { refs } from './js/api';
 import { fetchCards } from './js/api';
 import cardTpl from './templates/card.hbs';
@@ -18,41 +17,30 @@ refs.gallery.addEventListener('click', onGallery);
 
 function onGallery(e) {
   e.preventDefault();
-  const lightbox = new SimpleLightbox(`.gallery a`, lightboxOptions);
+  let lightbox = new SimpleLightbox(`.photo-card a`, lightboxOptions);
 }
-
-Notify.init({
-  width: '300px',
-
-  position: 'center-top', // 'right-top' - 'right-bottom' - 'left-top' - 'left-bottom' - 'center-top' - 'center-bottom' - 'center-center'
-  timeout: 1000,
-
-  failure: {
-    background: 'rgb(160, 160, 160)',
-    textColor: '#000',
-    childClassName: 'notiflix-notify-failure',
-    notiflixIconColor: 'rgb(0,0,0)',
-    fontAwesomeClassName: 'fas fa-times-circle',
-    fontAwesomeIconColor: 'rgb(0,0,0)',
-    backOverlayColor: 'rgba(255,85,73,0.2)',
-  },
-});
 
 refs.searchForm.addEventListener('submit', onSubmit);
 refs.loadMoreBtn.addEventListener('click', onLoadMoreBtn);
 
 function onSubmit(e) {
   e.preventDefault();
+
   refs.gallery.innerHTML = '';
-  refs.loadMoreBtn.classList.add('is-hidden');
   refs.loader.classList.remove('is-hidden');
+  refs.loadMoreBtn.classList.add('is-hidden');
+
   resetPage();
+
   fetchCards()
     .then(articles => {
       if (articles.length === 0) {
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
+        refs.loader.classList.add('is-hidden');
+        refs.loadMoreBtn.classList.add('is-hidden');
+        return;
       }
       markupCards({ articles });
       refs.loader.classList.add('is-hidden');
