@@ -12,12 +12,13 @@ const lightboxOptions = {
   navText: ['‹', '›'],
   fadeSpeed: 250,
 };
+let lightbox = new SimpleLightbox(`.gallery a`, lightboxOptions);
 
 refs.gallery.addEventListener('click', onGallery);
 
 function onGallery(e) {
   e.preventDefault();
-  let lightbox = new SimpleLightbox(`.photo-card a`, lightboxOptions);
+  new SimpleLightbox(`.gallery a`, lightboxOptions);
 }
 
 refs.searchForm.addEventListener('submit', onSubmit);
@@ -34,14 +35,6 @@ function onSubmit(e) {
 
   fetchCards()
     .then(articles => {
-      if (articles.length === 0) {
-        Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-        refs.loader.classList.add('is-hidden');
-        refs.loadMoreBtn.classList.add('is-hidden');
-        return;
-      }
       markupCards({ articles });
       refs.loader.classList.add('is-hidden');
       refs.loadMoreBtn.classList.remove('is-hidden');
@@ -52,6 +45,7 @@ function onSubmit(e) {
 function onLoadMoreBtn() {
   fetchCards().then(articles => {
     markupCards({ articles });
+    lightbox.refresh();
   });
 }
 

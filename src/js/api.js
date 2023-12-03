@@ -27,6 +27,9 @@ export function fetchCards() {
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
+        refs.loader.classList.add('is-hidden');
+        refs.loadMoreBtn.classList.add('is-hidden');
+        return;
       }
       incrementPage();
       return response.data.hits;
