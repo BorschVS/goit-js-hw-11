@@ -3,6 +3,7 @@ import FindApiService from './js/api-async';
 import cardTpl from './templates/card.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
@@ -16,7 +17,6 @@ refs = {
 };
 
 const api = new FindApiService();
-console.log(refs);
 refs.searchForm.addEventListener('submit', onSubmit);
 
 loadMoreBtn.refs.button.addEventListener('click', fetchCards);
@@ -32,9 +32,17 @@ function onSubmit(e) {
 
 async function fetchCards() {
   const articles = await api.fetchCards();
+  if (articles.length === 0 || api.searchQuery === '') {
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    loadMoreBtn.hideLoader();
+    return;
+  }
   markupCards({ articles });
-  loadMoreBtn.show();
   loadMoreBtn.hideLoader();
+  loadMoreBtn.show();
+  api.incrementPage();
 }
 
 function markupCards(articles) {
