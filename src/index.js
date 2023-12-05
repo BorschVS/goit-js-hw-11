@@ -5,21 +5,21 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+const refs = {
+  searchForm: document.getElementById('search-form'),
+  gallery: document.querySelector('.gallery'),
+};
+
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
   hidden: false,
 });
 
-refs = {
-  searchForm: document.getElementById('search-form'),
-  input: document.querySelector('input[name="searchQuery"]'),
-  gallery: document.querySelector('.gallery'),
-};
-
 const api = new FindApiService();
-refs.searchForm.addEventListener('submit', onSubmit);
 
+refs.searchForm.addEventListener('submit', onSubmit);
 loadMoreBtn.refs.button.addEventListener('click', fetchCards);
+refs.gallery.addEventListener('click', onGallery);
 
 function onSubmit(e) {
   e.preventDefault();
@@ -57,9 +57,7 @@ const lightboxOptions = {
   fadeSpeed: 250,
 };
 
-refs.gallery.addEventListener('click', onGallery);
-
 function onGallery(e) {
   e.preventDefault();
-  const lightbox = new SimpleLightbox('.gallery a', lightboxOptions);
+  new SimpleLightbox('.gallery a', lightboxOptions);
 }

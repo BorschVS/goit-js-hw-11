@@ -11,11 +11,12 @@ export default class FindApiService {
     this.imageType = 'photo';
     this.orientation = 'horizontal';
     this.safesearch = true;
+    this.input = document.querySelector('input[name="searchQuery"]');
   }
 
   async fetchCards() {
     try {
-      this.searchQuery = refs.input.value;
+      this.searchQuery = this.input.value;
       const url = `${this.url}?key=${this.key}&q=${this.searchQuery}&page=${this.page}&per_page=${this.perPage}&image_type=${this.imageType}&orientation=${this.orientation}&safesearch=${this.safesearch}`;
       const response = await axios.get(url);
       if (this.page === 1 && response.data.totalHits !== 0) {
