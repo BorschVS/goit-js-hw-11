@@ -17,11 +17,16 @@ export default class FindApiService {
   async fetchCards() {
     try {
       this.searchQuery = this.input.value;
+      if (this.searchQuery === '') {
+        return;
+      }
       const url = `${this.url}?key=${this.key}&q=${this.searchQuery}&page=${this.page}&per_page=${this.perPage}&image_type=${this.imageType}&orientation=${this.orientation}&safesearch=${this.safesearch}`;
       const response = await axios.get(url);
+
       if (this.page === 1 && response.data.totalHits !== 0) {
         Notify.success(`"Hooray! We found ${response.data.totalHits} images."`);
       }
+
       return await response.data.hits;
     } catch (error) {
       console.log(error);

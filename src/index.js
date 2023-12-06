@@ -5,6 +5,16 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+const lightboxOptions = {
+  captions: true,
+  captionDelay: 250,
+  captionsData: 'alt',
+  navText: ['‹', '›'],
+  fadeSpeed: 250,
+};
+
+const lightbox = new SimpleLightbox('.gallery a', lightboxOptions);
+
 const refs = {
   searchForm: document.getElementById('search-form'),
   gallery: document.querySelector('.gallery'),
@@ -19,10 +29,12 @@ const api = new FindApiService();
 
 refs.searchForm.addEventListener('submit', onSubmit);
 loadMoreBtn.refs.button.addEventListener('click', fetchCards);
-refs.gallery.addEventListener('click', onGallery);
 
 function onSubmit(e) {
   e.preventDefault();
+  setTimeout(() => {
+    loadMoreBtn.hideLoader();
+  }, 1000);
   refs.gallery.innerHTML = '';
   api.resetPage();
   fetchCards();
@@ -40,6 +52,7 @@ async function fetchCards() {
     return;
   }
   markupCards({ articles });
+  lightbox.refresh();
   loadMoreBtn.hideLoader();
   loadMoreBtn.show();
   api.incrementPage();
@@ -47,17 +60,4 @@ async function fetchCards() {
 
 function markupCards(articles) {
   refs.gallery.insertAdjacentHTML('beforeend', cardTpl(articles));
-}
-
-const lightboxOptions = {
-  captions: true,
-  captionDelay: 250,
-  captionsData: 'alt',
-  navText: ['‹', '›'],
-  fadeSpeed: 250,
-};
-
-function onGallery(e) {
-  e.preventDefault();
-  new SimpleLightbox('.gallery a', lightboxOptions);
 }
