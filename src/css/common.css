@@ -11,7 +11,7 @@ body {
   font-size: 18px;
   color: #212121;
   line-height: 1.5;
-  background-color: #fafafa;
+  background-color: rgb(238, 255, 250);
   margin: 0;
 }
 
@@ -86,13 +86,13 @@ p {
 }
 
 form {
-  width: 100%;
+  width: 100vw;
   display: flex;
   justify-content: center;
   gap: 10px;
   padding: 5px 0;
-  background-color: #e2e2e2;
-
+  background-color: rgb(223, 255, 245);
+  border-radius: 0;
   box-shadow: 0 0 3 0 black;
 }
 
@@ -120,7 +120,8 @@ input::placeholder {
   color: #6e6e6e;
 }
 
-button {
+.submit-btn,
+.load-more {
   margin-bottom: 5px;
   margin-top: 5px;
   padding: 10px 10px;
@@ -129,19 +130,21 @@ button {
   font-size: 14px;
   text-decoration: none;
   color: black;
-  background-color: rgba(255, 255, 255, 0.712);
+  background-color: rgba(255, 255, 255, 0.733);
 
   box-shadow: 0 0 3 0 black;
   text-transform: uppercase;
 }
 
-button:hover {
+.submit-btn:hover,
+.load-more:hover {
   background-color: rgb(255, 255, 255);
 
   box-shadow: 0 0 4 0 black;
 }
 
-button:active {
+.submit-btn:active,
+.load-more:active {
   color: black;
   background-color: rgba(255, 255, 255, 0.897);
 
@@ -187,13 +190,18 @@ button:active {
   gap: 10px;
 }
 
+@media screen and (min-width: 768px) {
+  .info-item {
+    width: calc((100% + 10px * 2) / 2);
+  }
+}
+
 .info-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-wrap: wrap;
 
-  width: calc((100% + 10px * 2) / 2);
   /* padding-left: 5px; */
   /* flex-grow: 1; */
 
@@ -222,5 +230,3 @@ button:active {
 
   object-fit: cover;
 }
-
-/*  */

@@ -4,6 +4,7 @@ import cardTpl from './templates/card.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import throttle from 'lodash.throttle';
 
 const lightboxOptions = {
   captions: true,
@@ -12,6 +13,10 @@ const lightboxOptions = {
   navText: ['‹', '›'],
   fadeSpeed: 250,
 };
+
+Notify.init({
+  position: 'left-top',
+});
 
 const lightbox = new SimpleLightbox('.gallery a', lightboxOptions);
 
@@ -51,13 +56,35 @@ async function fetchCards() {
     loadMoreBtn.hideLoader();
     return;
   }
+
   markupCards({ articles });
   lightbox.refresh();
   loadMoreBtn.hideLoader();
   loadMoreBtn.show();
   api.incrementPage();
+  console.log(articles.length);
+  if (articles.length < 40) {
+    window.addEventListener('scroll', throttle(handleScroll, 500));
+    loadMoreBtn.hide();
+  }
 }
 
 function markupCards(articles) {
   refs.gallery.insertAdjacentHTML('beforeend', cardTpl(articles));
+}
+
+function isAtEndOfPage() {
+  const totalPageHeight = document.documentElement.scrollHeight;
+
+  const scrollTop = window.scrollY || window.pageYOffset;
+
+  const windowHeight = window.innerHeight;
+
+  return scrollTop + windowHeight >= totalPageHeight;
+}
+
+function handleScroll() {
+  if (isAtEndOfPage()) {
+    Notify.info('Сollection is over');
+  }
 }
