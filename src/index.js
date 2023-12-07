@@ -32,8 +32,8 @@ const loadMoreBtn = new LoadMoreBtn({
 
 const api = new FindApiService();
 
-refs.searchForm.addEventListener('submit', _.debounce(onSubmit, 500));
-loadMoreBtn.refs.button.addEventListener('click', _.debounce(fetchCards, 500));
+refs.searchForm.addEventListener('submit', onSubmit);
+loadMoreBtn.refs.button.addEventListener('click', fetchCards);
 
 function onSubmit(e) {
   e.preventDefault();
