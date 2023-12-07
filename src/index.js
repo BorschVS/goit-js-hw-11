@@ -4,7 +4,7 @@ import cardTpl from './templates/card.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 const lightboxOptions = {
   captions: true,
@@ -64,7 +64,7 @@ async function fetchCards() {
   api.incrementPage();
   console.log(articles.length);
   if (articles.length < 40) {
-    window.addEventListener('scroll', throttle(handleScroll, 500));
+    window.addEventListener('scroll', debounce(handleScroll, 300));
     loadMoreBtn.hide();
   }
 }
