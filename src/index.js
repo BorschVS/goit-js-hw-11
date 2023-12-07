@@ -4,7 +4,7 @@ import cardTpl from './templates/card.hbs';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import debounce from 'lodash.debounce';
+import _ from 'lodash';
 
 const lightboxOptions = {
   captions: true,
@@ -32,8 +32,8 @@ const loadMoreBtn = new LoadMoreBtn({
 
 const api = new FindApiService();
 
-refs.searchForm.addEventListener('submit', onSubmit);
-loadMoreBtn.refs.button.addEventListener('click', fetchCards);
+refs.searchForm.addEventListener('submit', _.debounce(onSubmit, 500));
+loadMoreBtn.refs.button.addEventListener('click', _.debounce(fetchCards, 500));
 
 function onSubmit(e) {
   e.preventDefault();
@@ -62,9 +62,8 @@ async function fetchCards() {
   loadMoreBtn.hideLoader();
   loadMoreBtn.show();
   api.incrementPage();
-  console.log(articles.length);
-  if (articles.length < 40) {
-    window.addEventListener('scroll', debounce(handleScroll, 300));
+  if (articles.length !== 40) {
+    window.addEventListener('scroll', _.debounce(handleScroll, 300));
     loadMoreBtn.hide();
   }
 }
